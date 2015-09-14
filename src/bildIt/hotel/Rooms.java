@@ -4,7 +4,6 @@ package bildIt.hotel;
  * @author Dijana Markovic
  *
  */
-/* This is room class with basic data files */
 public class Rooms {
 	public static final int TWO_DOUBLE_BEDS_ROOM = 0;
 	public static final int ONE_BED_ROOM = 0;

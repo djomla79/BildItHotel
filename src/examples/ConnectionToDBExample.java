@@ -1,4 +1,4 @@
-package bildIt.hotel;
+package examples;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

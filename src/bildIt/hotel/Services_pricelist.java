@@ -1,5 +1,9 @@
 package bildIt.hotel;
 
+/**
+ * @author Dijana Markovic
+ *
+ */
 public class Services_pricelist {
 	private int apartmant = 60;
 	private int gym = 10;
