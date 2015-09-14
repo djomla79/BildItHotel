@@ -34,4 +34,68 @@ public class DailyOrder {
 
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getRoomNumber() {
+		return roomNumber;
+	}
+
+	public void setRoomNumber(int roomNumber) {
+		this.roomNumber = roomNumber;
+	}
+
+	public int getOrderID() {
+		return orderID;
+	}
+
+	public void setOrderID(int orderID) {
+		this.orderID = orderID;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public boolean isGym() {
+		return gym;
+	}
+
+	public void setGym(boolean gym) {
+		this.gym = gym;
+	}
+
+	public boolean isRestaurant() {
+		return restaurant;
+	}
+
+	public void setRestaurant(boolean restaurant) {
+		this.restaurant = restaurant;
+	}
+
+	public boolean isSaun() {
+		return saun;
+	}
+
+	public void setSaun(boolean saun) {
+		this.saun = saun;
+	}
+
+	public boolean isPool() {
+		return pool;
+	}
+
+	public void setPool(boolean pool) {
+		this.pool = pool;
+	}
+
 }

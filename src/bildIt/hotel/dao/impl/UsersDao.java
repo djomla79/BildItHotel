@@ -13,8 +13,9 @@ import bildIt.hotel.Users;
  */
 public class UsersDao {
 
-	Users user = new Users();
-	Users userSession = new Users();
+	// Users user = new Users();
+
+	// Users userSession = new Users();
 
 	/**
 	 * @param userName
@@ -184,7 +185,7 @@ public class UsersDao {
 			Connection connection = con.connect();
 			preparedStatment = connection.prepareStatement(sql);
 			ResultSet rs = preparedStatment.executeQuery();
-
+			rs.beforeFirst();
 			if (rs.next()) {
 
 				// System.out.println(rs.getString("isOnline"));
@@ -221,7 +222,7 @@ public class UsersDao {
 	 *
 	 * @param userName
 	 * @param password
-	 * @param firstName
+	 * @param Name
 	 * @param lastName
 	 * @param isAdmin
 	 * @param gender
@@ -229,7 +230,7 @@ public class UsersDao {
 	 * @param isOnline
 	 */
 	public static void addUserToDatabase(String userName, String password,
-			String firstName, String lastName, String isAdmin, String gender,
+			String Name, String lastName, String isAdmin, String gender,
 			String idCard, String isOnline) {
 
 		/** Invoke ConnectionUtil Class to establish connection with the DB */
@@ -243,7 +244,7 @@ public class UsersDao {
 					.prepareStatement(" INSERT INTO `users`(`userName`, `password`, `name`, `lastName`, `isAdmin`, `gender`, `idCard`, `isOnline`) VALUES(?, ?, ?, ?, ?, ?, ?, ?) ");
 			insertQuery.setString(1, userName);
 			insertQuery.setString(2, password);
-			insertQuery.setString(3, firstName);
+			insertQuery.setString(3, Name);
 			insertQuery.setString(4, lastName);
 			insertQuery.setString(5, isAdmin);
 			insertQuery.setString(6, gender);
@@ -304,5 +305,306 @@ public class UsersDao {
 			}
 		}
 		return false; // If user is NOT found, return false
+	}
+
+	/**
+	 * @author Bojan Aleksic
+	 * @return
+	 */
+	public static String getUsersFromDB() {
+
+		String s = "";
+
+		/**
+		 * Invoke ConnectionUtil Class to establish MySQL connection with the DB
+		 */
+		ConnectionUtil connection = new ConnectionUtil();
+		PreparedStatement prepStat = null; // declare PreparedStatement
+											// interface
+		try {
+			Connection mysqlConnect = connection.connect();
+			/** Select `userName` column from the table `users` */
+			prepStat = mysqlConnect
+					.prepareStatement(" SELECT `userName` FROM `users` WHERE `isAdmin` = 'false' ");
+			ResultSet rs = prepStat.executeQuery(); // execute function
+			while (rs.next()) {
+				s += "[" + rs.getString("userName") + "] ";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				/** Close connection with the Database */
+				ConnectionUtil.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return s;
+	}
+
+	/**
+	 * Method - Update user in the Database (change information)
+	 * 
+	 * @author Bojan Aleksic
+	 */
+	public static void updateUserInDatabase(String userName, String column,
+			String queryToUpdate) {
+
+		/** Invoke ConnectionUtil Class to establish connection with the DB */
+		ConnectionUtil connection = new ConnectionUtil();
+		PreparedStatement updateQuery = null;
+
+		try {
+			Connection mysqlConnect = connection.connect();
+			/**
+			 * Update query in database at specified column with specified query
+			 */
+			updateQuery = mysqlConnect.prepareStatement(" UPDATE `users` SET "
+					+ column + " = ? WHERE `userName` = '" + userName + "' ");
+			updateQuery.setString(1, queryToUpdate);
+			updateQuery.executeUpdate(); // execute update
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				/** Close connection with the database */
+				ConnectionUtil.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * @author Mladen
+	 * @param userName
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public static String findUserByUserName(String userName) {
+		String result = "";
+
+		// Users user = new Users(userName);
+
+		ConnectionUtil con = new ConnectionUtil();
+
+		PreparedStatement preparedStatement = null;
+
+		String sql = "SELECT * FROM users WHERE `userName` = '" + userName
+				+ "' ";
+
+		try {
+
+			Connection connection = con.connect();
+
+			preparedStatement = connection.prepareStatement(sql);
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			if (!rs.next()) {
+				result = null;
+			} else {
+
+				result = "[userName]" + rs.getString("userName") + " "
+						+ "[password]" + rs.getString("password") + " "
+						+ "[name]" + rs.getString("Name") + " " + "[lastName]"
+						+ rs.getString("lastName") + " " + "[isAdmin]"
+						+ rs.getBoolean("isAdmin") + " " + "[gender]"
+						+ rs.getString("gender") + " " + "[idCard]"
+						+ rs.getString("idCard");
+
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		} finally {
+			try {
+
+				ConnectionUtil.closeConnection();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * @author Mladen
+	 * @param Name
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public static String findUserByName(String Name)
+			throws ClassNotFoundException, SQLException {
+		String result = "";
+		ConnectionUtil con = new ConnectionUtil();
+		PreparedStatement preparedStatement = null;
+
+		String sql = "SELECT * FROM users WHERE `Name` = '" + Name
+				+ "' ";
+
+		try {
+
+			Connection connection = con.connect();
+
+			preparedStatement = connection.prepareStatement(sql);
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			if (rs.next()) {
+
+				result += "[userName]" + rs.getString("userName") + " "
+						+ "[password]" + rs.getString("password") + " "
+						+ "[name]" + rs.getString("Name") + " " + "[lastName]"
+						+ rs.getString("lastName") + " " + "[isAdmin]"
+						+ rs.getBoolean("isAdmin") + " " + "[gender]"
+						+ rs.getString("gender") + " " + "[idCard]"
+						+ rs.getString("idCard");
+			} else {
+				result += "No data found!";
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		} finally {
+			try {
+
+				ConnectionUtil.closeConnection();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+
+	}
+
+	/**
+	 * @author Mladen Metoda koja prima unos licne karte korisnika i vrsi
+	 *         pretragu u bazi za tog korisnika
+	 */
+	public static String findUserByIDCard(String string)
+			throws ClassNotFoundException, SQLException {
+
+		String result = "";
+
+		ConnectionUtil con = new ConnectionUtil();
+
+		PreparedStatement preparedStatement = null;
+
+		String sql = "SELECT * FROM users WHERE `idCard` = '" + string + "' ";
+
+		try {
+
+			Connection connection = con.connect();
+
+			preparedStatement = connection.prepareStatement(sql);
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			if (rs.next()) {
+
+				result += "[userName]" + rs.getString("userName") + " "
+						+ "[password]" + rs.getString("password") + " "
+						+ "[name]" + rs.getString("Name") + " " + "[lastName]"
+						+ rs.getString("lastName") + " " + "[isAdmin]"
+						+ rs.getBoolean("isAdmin") + " " + "[gender]"
+						+ rs.getString("gender") + " " + "[idCard]"
+						+ rs.getString("idCard");
+			} else {
+				result += "No data found!";
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		} finally {
+			try {
+
+				ConnectionUtil.closeConnection();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+
+	}
+
+	/**
+	 * @author Bojan Aleksic
+	 */
+	public static void logOutAllUsers() {
+
+		/** Instantiate Users object */
+		Users currentUser = new Users();
+		/** Invoke ConnectionUtil Class to establish connection with the DB */
+		ConnectionUtil connection = new ConnectionUtil();
+		PreparedStatement insertQuery = null;
+		try {
+			Connection mysqlConnect = connection.connect();
+			/**
+			 * Update `users` table, set column `isOnline` to 'false' for all
+			 * logged in users except for the current user
+			 */
+			insertQuery = mysqlConnect
+					.prepareStatement(" UPDATE `users` SET `isOnline` = 'false' WHERE `userName` != '"
+							+ currentUser.getUserName() + "' ");
+			insertQuery.executeUpdate(); // execute update
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				/** Close connection with the database */
+				ConnectionUtil.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * @author Bojan Aleksic
+	 * @return
+	 */
+	public static String getOnlineUsers() {
+
+		/** Declare empty string to add online users to it */
+		String onlineUsers = "";
+
+		/**
+		 * Invoke ConnectionUtil Class to establish MySQL connection with the DB
+		 */
+		ConnectionUtil connection = new ConnectionUtil();
+		PreparedStatement prepStat = null; // declare PreparedStatement
+											// interface
+		try {
+			Connection mysqlConnect = connection.connect();
+			/** Select all from `users` */
+			prepStat = mysqlConnect
+					.prepareStatement(" SELECT * FROM `users` WHERE `isOnline` = 'true' ");
+			ResultSet rs = prepStat.executeQuery(); // execute function
+			while (rs.next()) {
+				/** Add online users to the string */
+				onlineUsers += "[" + rs.getString("userName") + "] ";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				/** Close connection with the Database */
+				ConnectionUtil.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return onlineUsers; // return online users String
 	}
 }

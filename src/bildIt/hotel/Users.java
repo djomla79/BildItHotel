@@ -14,7 +14,7 @@ public class Users {
 	@SuppressWarnings("unused")
 	private boolean isAdmin;
 	private String gender;
-	private int idCard;
+	private String idCard;
 	private String isOnline;
 
 	/** Instantiate static Users object with userName and password */
@@ -25,6 +25,10 @@ public class Users {
 
 	}
 
+	public Users(String userName) {
+		this.userName = userName;
+	}
+
 	/** Constructor with specified user name and password */
 	public Users(String userName, String password) {
 		Users.userName = userName;
@@ -33,7 +37,7 @@ public class Users {
 
 	/** Constructor with specified all parameters */
 	public Users(String userName, String password, String firstName,
-			String lastName, boolean isAdmin, String gender, int idCard,
+			String lastName, boolean isAdmin, String gender, String idCard,
 			String isOnline) {
 		Users.userName = userName;
 		Users.password = password;
@@ -69,8 +73,24 @@ public class Users {
 		this.gender = gender;
 	}
 
-	public void setIdCard(int idCard) {
+	public void setIdCard(String idCard) {
 		this.idCard = idCard;
+	}
+
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	public String getIsOnline() {
+		return isOnline;
+	}
+
+	public void setIsOnline(String isOnline) {
+		this.isOnline = isOnline;
 	}
 
 	/** Getters */
@@ -95,7 +115,7 @@ public class Users {
 		return gender;
 	}
 
-	public int getIdCard() {
+	public String getIdCard() {
 		return idCard;
 	}
 

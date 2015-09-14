@@ -1,14 +1,10 @@
 package bildIt.hotel;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
-import com.mysql.jdbc.interceptors.SessionAssociationInterceptor;
-
-import bildIt.hotel.dao.impl.ConnectionUtil;
+import sun.util.logging.resources.logging;
 import bildIt.hotel.dao.impl.UsersDao;
 
 //class Runner implements Runnable {
@@ -81,12 +77,14 @@ public class App {
 	public static String test = "t";
 	static Scanner input = new Scanner(System.in);
 
-	@SuppressWarnings("deprecation")
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException,
+			ClassNotFoundException, SQLException {
+
 		String userName = "";
 		String password = "";
 		Users userSession = new Users();
 
+		// program has to runn all the time....
 		while (true) {
 
 			System.out.println("--------------------------------------------");
@@ -94,23 +92,18 @@ public class App {
 			System.out.println("--------------------------------------------");
 			System.out.println(">Please login to proceed.\n");
 
+			// get users user name and password
 			System.out.println("User name:");
 			userName = input.next();
 			System.out.println("Password:");
 			password = input.next();
 			userSession = UsersDao.logOn(userName, password);
 
-			// check if login was succes
+			// check if login was success
 			if (userSession != null) {
 
 				// check if user is admin!
 				if (UsersDao.isAdmin(userSession) == true) {
-					// this part is a thread that is checking if some one loged
-					// out
-					// or user using other thread!
-					// Thread isUserOnlineThread = new Thread(new
-					// Runner(userName));
-					// isUserOnlineThread.start();
 
 					// be in main menu for this user while he is logd in
 					while (userSession.getUserName() != null) {
@@ -128,16 +121,16 @@ public class App {
 							System.out
 									.println("--------------------------------------------");
 							System.out.println("[1] Register new user");
-							System.out.println("[2] Register user in room");
-							System.out.println("[3] Unregister user in room");
+							System.out.println("-[2] Register user in room");
+							System.out.println("-[3] Unregister user in room");
 							System.out.println("[4] Edit user");
-							System.out.println("[5] Print receipt ");
+							System.out.println("-[5] Print receipt ");
 							System.out
 									.println("[6] Check who is online (log some one out, log every one out)");
 							System.out
 									.println("[7] Find user info by: Name,ID or UserName");
 							System.out
-									.println("[8] Check for pending registration changes");
+									.println("-[8] Check for pending registration changes");
 							System.out.println("[9] Logout");
 
 							// make method that asks user to chouse from 1 to 9
@@ -145,7 +138,7 @@ public class App {
 
 							// register user
 							if (userInput == 1) {
-
+								boolean run = true;
 								do {
 
 									System.out
@@ -205,25 +198,208 @@ public class App {
 									}
 
 									System.out
-											.println("Try again: type [1] for YES or [2] for NO");
-									if (input.nextInt() == 2)
-										break;
+											.println("Try again or register new: type [1] for YES or [2] for NO");
 
-								} while (true);
+									if (input.nextInt() == 2)
+										run = false;
+
+								} while (run);
 							} else if (userInput == 2) {
+
 								System.out.println("reg user to room");
 							} else if (userInput == 3) {
 								System.out.println("unreg user to room");
 							} else if (userInput == 4) {
-								System.out.println("edit user");
+
+								boolean run = true;
+								do {
+									System.out
+											.println("--------------------------------------------");
+									System.out
+											.println("What user do you wont to edit:");
+									System.out.println(UsersDao
+											.getUsersFromDB());
+									System.out
+											.println("--------------------------------------------");
+
+									System.out.println("User name: ");
+									// clear scener
+									input.nextLine();
+									String tempUserName = input.nextLine();
+									if (!UsersDao
+											.isAlreadyRegistered(tempUserName)) {
+										System.out
+												.println("User name invalid!");
+									} else {
+
+										System.out
+												.println(UsersDao
+														.findUserByUserName(tempUserName));
+										System.out
+												.println("---------------------------------------------------------");
+										// ask user how many things he wonts to
+										// edit
+										System.out
+												.println("How many fields do you wont to edit?");
+										int fNumber = input.nextInt();
+										String field = "";
+										String fieldValue = "";
+										// clear the scener...
+										input.nextLine();
+										for (int i = 0; i < fNumber; i++) {
+											// ask user for every field what
+											// value to enter
+											do {
+												System.out
+														.println("What field do you wont to edit:");
+												field = input.nextLine();
+												// cant select field that does
+												// not exist
+
+											} while (!((field
+													.equals("userName")
+													|| field.equals("password")
+													|| field.equals("name")
+													|| field.equals("lastName")
+													|| field.equals("isAdmin")
+													|| field.equals("gender") || field
+														.equals("idCard"))));
+
+											System.out
+													.println("New value for field "
+															+ field + ".");
+											fieldValue = input.nextLine();
+
+											// check if that userName is taken
+											if (field.equals("userName")
+													&& UsersDao
+															.isAlreadyRegistered(fieldValue)) {
+												System.out
+														.println("Did not update userName because that userName is taken!");
+
+											} else {
+
+												UsersDao.updateUserInDatabase(
+														tempUserName, field,
+														fieldValue);
+												System.out.println("Field "
+														+ field
+														+ " updated to value: "
+														+ fieldValue);
+											}
+										}
+									}
+
+									System.out
+											.println("Try again or edit more: type [1] for YES or [2] for NO");
+
+									if (input.nextInt() == 2)
+										run = false;
+
+								} while (run);
+
 							} else if (userInput == 5) {
 								System.out.println("print recipt");
 							} else if (userInput == 6) {
-								System.out.println("who is online");
+								boolean run = true;
+
+								do {
+									System.out
+											.println("--------------------------------------------");
+									System.out.println("Online users: ");
+									System.out.println(UsersDao
+											.getOnlineUsers());
+									System.out
+											.println("--------------------------------------------");
+									System.out
+											.println("[1] for log everyone out! [2] for log some one out!");
+									int userInputForOnline = input.nextInt();
+									if (userInputForOnline == 1) {
+										UsersDao.logOutAllUsers();
+										System.out
+												.println("Every one is now loged out!");
+									} else {
+										String logOutSomeOne = "";
+
+										System.out
+												.println("Who do you wont to log out:");
+										// clean scaner again
+										input.nextLine();
+										logOutSomeOne = input.nextLine();
+										if (UsersDao
+												.isAlreadyRegistered(logOutSomeOne)) {
+											Users logMeOut = new Users(
+													logOutSomeOne);
+											UsersDao.logOut(logMeOut);
+											System.out.println(logOutSomeOne
+													+ " is loged out!");
+										} else {
+											System.out.println("Invalid user!");
+										}
+
+									}
+
+									System.out
+											.println("Logout someone again?: type [1] for YES or [2] for NO");
+									if (input.nextInt() == 2)
+										run = false;
+
+								} while (run);
+
 							} else if (userInput == 7) {
-								System.out.println("find user");
+
+								boolean run = true;
+								do {
+									System.out
+											.println("How do you wona search for your user: [1] for by userName [2] for by Name [3] for by ID");
+									int userInputForSearch = input.nextInt();
+									if (userInputForSearch == 1) {
+										// clera scener
+										input.nextLine();
+										System.out
+												.println("What is that user userName?");
+										String tempSearch = input.nextLine();
+										if (UsersDao
+												.findUserByUserName(tempSearch) != null) {
+											System.out
+													.println(UsersDao
+															.findUserByUserName(tempSearch));
+
+										} else {
+											System.out
+													.println("No data found!");
+										}
+
+									} else if (userInputForSearch == 2) {
+
+										// clera scener
+										input.nextLine();
+										System.out
+												.println("What is that user Name?");
+										System.out.println(UsersDao
+												.findUserByName(input
+														.nextLine()));
+
+									} else if (userInputForSearch == 3) {
+										// clera scener
+										input.nextLine();
+										System.out
+												.println("What is that user ID number?");
+										System.out.println(UsersDao
+												.findUserByIDCard(input
+														.nextLine()));
+
+									}
+
+									System.out
+											.println("Logout someone again?: type [1] for YES or [2] for NO");
+									if (input.nextInt() == 2)
+										run = false;
+
+								} while (run);
+
 							} else if (userInput == 8) {
-								System.out.println("check for pend");
+								System.out.println("check for pend changes");
 							} else if (userInput == 9) {
 								UsersDao.logOut(userSession);
 								break;
@@ -254,7 +430,9 @@ public class App {
 							}
 						}
 						System.out.println("Admin loged you out!");
+
 						UsersDao.logOut(userSession);
+
 					}
 				}
 
