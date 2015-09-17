@@ -1009,17 +1009,20 @@ public class UsersDao {
 
 				/** calculate room price */
 				if (roomtype.equals("one bed")) {
-					if (daysDaily != 0) {
+					if (daysDaily != 0)
 						billRoom += 20 * daysRecip;
-					}
+					else
+						billRoom += 20;
 				} else if (roomtype.equals("two beds")) {
-					if (daysDaily != 0) {
+					if (daysDaily != 0)
 						billRoom += 40 * daysRecip;
-					}
+					else
+						billRoom += 40;
 				} else if (roomtype.endsWith("apartment")) {
-					if (daysDaily != 0) {
+					if (daysDaily != 0)
 						billRoom += 60 * daysRecip;
-					}
+					else
+						billRoom += 60;
 				}
 
 				/**
