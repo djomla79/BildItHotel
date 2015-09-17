@@ -921,17 +921,21 @@ public class UsersDao {
 
 				/** calculate room price */
 				if (roomtype.equals("one bed")) {
-					if (daysDaily != 0) {
+					if (daysDaily != 0)
 						billRoomDaily += 20 * daysDaily;
-					}
+					else
+						billRoomDaily += 20;
+
 				} else if (roomtype.equals("two beds")) {
-					if (daysDaily != 0) {
+					if (daysDaily != 0)
 						billRoomDaily += 40 * daysDaily;
-					}
+					else
+						billRoomDaily += 40;
 				} else if (roomtype.endsWith("apartment")) {
-					if (daysDaily != 0) {
+					if (daysDaily != 0)
 						billRoomDaily += 60 * daysDaily;
-					}
+					else
+						billRoomDaily += 60;
 				}
 
 				/**
@@ -974,7 +978,7 @@ public class UsersDao {
 				}
 
 				roomUsedDaily = "Room" + "(" + billRoomDaily + "$)"
-						+ " - room type: " + roomtype;
+						+ "\nroom type: " + roomtype;
 
 			}
 			double billDaily = billGymDaily + billRestaurantDaily
