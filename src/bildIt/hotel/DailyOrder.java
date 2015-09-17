@@ -16,7 +16,7 @@ public class DailyOrder {
 	private boolean restaurant;
 	private boolean saun;
 	private boolean pool;
-
+	
 	public DailyOrder() {
 
 	}

@@ -15,7 +15,7 @@ public class ConnectionUtil {
 	 * this is where you set your database settings
 	 */
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost/hotel";
+	static final String DB_URL = "jdbc:mysql://localhost/hotel?allowMultiQueries=true";
 	static final String USER = "root";
 	static final String PASS = "root";
 	static Connection conn = null;
@@ -35,6 +35,14 @@ public class ConnectionUtil {
 
 	public static void closeConnection() throws SQLException {
 		conn.close();
+	}
+
+	public static String getUser() {
+		return USER;
+	}
+
+	public static String getPass() {
+		return PASS;
 	}
 
 }

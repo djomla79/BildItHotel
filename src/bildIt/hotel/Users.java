@@ -1,26 +1,25 @@
 package bildIt.hotel;
 
+import java.util.Date;
+
 /**
  * 
  * @author Bojan Aleksic
  */
 public class Users {
 
-	/** Declare data fields for users */
-	private static String userName;
-	private static String password;
+	private String userName;
+	private String password;
 	private String firstName;
 	private String lastName;
-	@SuppressWarnings("unused")
 	private boolean isAdmin;
 	private String gender;
 	private String idCard;
-	private String isOnline;
+	private boolean isOnline;
+	private boolean isCheckdIn;
+	private Date dateOfCheckingIn;
+	private Date userCheckdOutDate;
 
-	/** Instantiate static Users object with userName and password */
-	public static Users user = new Users(userName, password);
-
-	/** An empty constructor */
 	public Users() {
 
 	}
@@ -29,36 +28,57 @@ public class Users {
 		this.userName = userName;
 	}
 
-	/** Constructor with specified user name and password */
 	public Users(String userName, String password) {
-		Users.userName = userName;
-		Users.password = password;
+		this.userName = userName;
+		this.password = password;
 	}
 
-	/** Constructor with specified all parameters */
 	public Users(String userName, String password, String firstName,
 			String lastName, boolean isAdmin, String gender, String idCard,
-			String isOnline) {
-		Users.userName = userName;
-		Users.password = password;
+			boolean isOnline) {
+		this.userName = userName;
+		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.isAdmin = isAdmin;
 		this.gender = gender;
 		this.idCard = idCard;
 		this.isOnline = isOnline;
+
 	}
 
-	// ///////////////////////////////////////////////////////////////////////////////////
+	public Users(String userName, String password, String firstName,
+			String lastName, boolean isAdmin, String gender, String idCard,
+			boolean isOnline, boolean isCheckdIn, Date dateOfCheckingIn,
+			Date userCheckdOutDate) {
 
-	/** Setters */
+		this.userName = userName;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.isAdmin = isAdmin;
+		this.gender = gender;
+		this.idCard = idCard;
+		this.isOnline = isOnline;
+		this.isCheckdIn = isCheckdIn;
+		this.dateOfCheckingIn = dateOfCheckingIn;
+		this.userCheckdOutDate = userCheckdOutDate;
+	}
 
 	public void setUserName(String userName) {
-		Users.userName = userName;
+		this.userName = userName;
+	}
+
+	public void setOnline(boolean isOnline) {
+		this.isOnline = isOnline;
+	}
+
+	public void setCheckdIn(boolean isCheckdIn) {
+		this.isCheckdIn = isCheckdIn;
 	}
 
 	public void setPassword(String password) {
-		Users.password = password;
+		this.password = password;
 	}
 
 	public void setFirstName(String firstName) {
@@ -85,15 +105,13 @@ public class Users {
 		this.isAdmin = isAdmin;
 	}
 
-	public String getIsOnline() {
+	public boolean getIsOnline() {
 		return isOnline;
 	}
 
-	public void setIsOnline(String isOnline) {
+	public void setIsOnline(boolean isOnline) {
 		this.isOnline = isOnline;
 	}
-
-	/** Getters */
 
 	public String getUserName() {
 		return userName;
@@ -119,8 +137,32 @@ public class Users {
 		return idCard;
 	}
 
-	public String isOnline() {
+	public boolean isOnline() {
 		return isOnline;
+	}
+
+	public boolean getIsCheckdIn() {
+		return isCheckdIn;
+	}
+
+	public void setIsCheckdIn(boolean isCheckdIn) {
+		this.isCheckdIn = isCheckdIn;
+	}
+
+	public Date getDateOfCheckingIn() {
+		return dateOfCheckingIn;
+	}
+
+	public void setDateOfCheckingIn(Date dateOfCheckingIn) {
+		this.dateOfCheckingIn = dateOfCheckingIn;
+	}
+
+	public Date getUserCheckdOutDate() {
+		return userCheckdOutDate;
+	}
+
+	public void setUserCheckdOutDate(Date userCheckdOutDate) {
+		this.userCheckdOutDate = userCheckdOutDate;
 	}
 
 }
